@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 400px;
+        margin: 40px auto;
+        padding: 10px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input {
+        margin-bottom: 12px;
+        padding: 8px;
+        font-size: 16px;
+      }
+      button {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      #output {
+        margin-top: 20px;
+        font-weight: bold;
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Form</h1>
+    <form id="f">
+      <input id="name" placeholder="Name" required>
+      <input id="score" type="number" placeholder="Score" required>
+      <button type="submit">Save Data</button>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+      const output = document.getElementById('output');
+
+      document.getElementById('f').addEventListener('submit', function(e) {
+        e.preventDefault();
+        output.textContent = '';  // Clear previous messages
+
+        const payload = {
+          name: document.getElementById('name').value,
+          score: document.getElementById('score').value
+        };
+
+        google.script.run
+          .withSuccessHandler(() => {
+            output.textContent = 'Data saved successfully!';
+            output.style.color = 'green';
+            this.reset();
+          })
+          .withFailureHandler(err => {
+            output.textContent = 'Error: ' + err.message;
+            output.style.color = 'red';
+          })
+          .saveData(payload);
+      });
+    </script>
+  </body>
+</html>
